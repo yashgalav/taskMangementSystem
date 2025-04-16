@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_user_table
+      author: yashgalav12345@gmail.com
+      changes:
+        - createTable:
+            tableName: user
+            schemaName: taskdb
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(64)
+              - column:
+                  name: last_name
+                  type: varchar(64)
+              - column:
+                  name: user_role
+                  type: varchar(64)
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id, username
+            constraintName: pk_user
+            schemaName: taskdb
+            tableName: user
+  - changeSet:
+      id: add_autoIncrement_user_id
+      author: yashgalav12345@gmail.com
+      changes:
+        - addAutoIncrement:
+            columnDataType: int(11)
+            columnName: id
+            defaultOnNull: false
+            generationType: ALWAYS
+            autoIncrement: true
+            schemaName: taskdb
+            startWith: 1
+            tableName: user
