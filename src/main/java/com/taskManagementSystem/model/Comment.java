@@ -9,6 +9,8 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+
 @Table(name = "comments")
 @Entity
 @Data
@@ -18,16 +20,18 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long createdBy;
+    private Long userId;
 
     private String comment;
+
+    private Long boardId;
 
     private Long taskId;
 
     @CreatedDate
-    private String created_at;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private String updated_at;
+    private LocalDateTime updatedAt;
 
 }

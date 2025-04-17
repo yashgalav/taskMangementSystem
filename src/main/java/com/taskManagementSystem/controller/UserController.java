@@ -6,6 +6,7 @@ import com.taskManagementSystem.model.User;
 import com.taskManagementSystem.security.JwtHelper;
 import com.taskManagementSystem.service.UserService;
 import com.taskManagementSystem.vo.SigninVo;
+import com.taskManagementSystem.vo.SignupVo;
 import com.taskManagementSystem.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -33,13 +34,13 @@ public class UserController {
     private JwtHelper jwtHelper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, Object>> signup(@Validated @RequestBody final User user) {
+    public ResponseEntity<Map<String, Object>> signup(@Validated @RequestBody final SignupVo signupVo) {
         User newUser = null;
         Map<String, Object> response = new HashMap<>();
         String token = null;
 
         try {
-            newUser = userService.createUser(user);
+            newUser = userService.createUser(signupVo);
             token = jwtHelper.generateToken(newUser.getUsername());
             newUser.setPassword(null);
         } catch (DataAccessException e) {

@@ -1,15 +1,11 @@
 package com.taskManagementSystem.model;
 
-import com.taskManagementSystem.enums.PriorityTagEnum;
-import com.taskManagementSystem.enums.StatusEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.Table;
 import lombok.Data;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -17,28 +13,20 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "task")
-public class Task {
+@Table(name = "board_user_xref")
+public class BoardXUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
-
-    private String description;
-
-    private String priorityTag;
-
     private Long userId;
-
     private Long boardId;
-
-    private String status;
+    private Boolean isBoardOwner = false;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 }

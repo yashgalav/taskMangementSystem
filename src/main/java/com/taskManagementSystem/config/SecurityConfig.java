@@ -1,5 +1,6 @@
 package com.taskManagementSystem.config;
 
+import com.taskManagementSystem.exception.CustomException;
 import com.taskManagementSystem.security.JWTAuthenticationEntryPoint;
 import com.taskManagementSystem.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;

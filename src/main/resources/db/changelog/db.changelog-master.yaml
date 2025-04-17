@@ -62,3 +62,244 @@ databaseChangeLog:
             schemaName: taskdb
             startWith: 1
             tableName: user
+  - changeSet:
+      id: create_task
+      author: yashgalav12345@gmail.com
+      changes:
+        - createTable:
+            tableName: task
+            schemaName: taskdb
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(264)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority_tag
+                  type: varchar(64)
+              - column:
+                  name: user_id
+                  type: int(11)
+              - column:
+                  name: board_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(64)
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id,
+            constraintName: pk_task
+            schemaName: taskdb
+            tableName: task
+  - changeSet:
+      id: add_autoIncrement_task_id
+      author: yashgalav12345@gmail.com
+      changes:
+        - addAutoIncrement:
+            columnDataType: int(11)
+            columnName: id
+            defaultOnNull: false
+            generationType: ALWAYS
+            autoIncrement: true
+            schemaName: taskdb
+            startWith: 1
+            tableName: task
+  - changeSet:
+      id: create_comments
+      author: yashgalav12345@gmail.com
+      changes:
+        - createTable:
+            tableName: comments
+            schemaName: taskdb
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: board_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: varchar(128)
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: pk_comment
+            schemaName: taskdb
+            tableName: comments
+  - changeSet:
+      id: add_autoIncrement_comment_id
+      author: yashgalav12345@gmail.com
+      changes:
+        - addAutoIncrement:
+            columnDataType: int(11)
+            columnName: id
+            defaultOnNull: false
+            generationType: ALWAYS
+            autoIncrement: true
+            schemaName: taskdb
+            startWith: 1
+            tableName: comments
+  - changeSet:
+      id: create_task_board
+      author: yashgalav12345@gmail.com
+      changes:
+        - createTable:
+            tableName: task_board
+            schemaName: taskdb
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: board_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: board_owner_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: pk_task_board
+            schemaName: taskdb
+            tableName: task_board
+  - changeSet:
+      id: add_autoIncrement_board_id
+      author: yashgalav12345@gmail.com
+      changes:
+        - addAutoIncrement:
+            columnDataType: int(11)
+            columnName: id
+            defaultOnNull: false
+            generationType: ALWAYS
+            autoIncrement: true
+            schemaName: taskdb
+            startWith: 1
+            tableName: task_board
+  - changeSet:
+      id: create_board_user_xref
+      author: yashgalav12345@gmail.com
+      changes:
+        - createTable:
+            tableName: board_user_xref
+            schemaName: taskdb
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: board_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_board_owner
+                  type: bool
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: pk_board_user_xref
+            schemaName: taskdb
+            tableName: board_user_xref
+  - changeSet:
+      id: add_autoIncrement_board_user_xref_id
+      author: yashgalav12345@gmail.com
+      changes:
+        - addAutoIncrement:
+            columnDataType: int(11)
+            columnName: id
+            defaultOnNull: false
+            generationType: ALWAYS
+            autoIncrement: true
+            schemaName: taskdb
+            startWith: 1
+            tableName: board_user_xref
+
+
+
+

@@ -1,44 +1,33 @@
 package com.taskManagementSystem.model;
 
-import com.taskManagementSystem.enums.PriorityTagEnum;
-import com.taskManagementSystem.enums.StatusEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.Table;
 import lombok.Data;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
 @Data
+@Table(name = "task_board")
 @Entity
-@Table(name = "task")
-public class Task {
+public class TaskBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String boardName;
 
-    private String description;
-
-    private String priorityTag;
-
-    private Long userId;
-
-    private Long boardId;
-
-    private String status;
+    private Long boardOwnerId;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 }

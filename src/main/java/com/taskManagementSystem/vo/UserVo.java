@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserVo {
+    private  Long userId;
 
     private String username;
 
@@ -17,5 +18,7 @@ public class UserVo {
     private String password;
 
     private String userRole;
+
+    private Long boardId;
 
 }

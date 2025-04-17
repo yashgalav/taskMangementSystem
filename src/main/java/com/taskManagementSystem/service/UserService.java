@@ -2,11 +2,16 @@ package com.taskManagementSystem.service;
 
 import com.taskManagementSystem.enums.UserRoleEnum;
 import com.taskManagementSystem.exception.CustomException;
+import com.taskManagementSystem.model.BoardXUser;
+import com.taskManagementSystem.model.TaskBoard;
 import com.taskManagementSystem.model.User;
+import com.taskManagementSystem.repository.BoardXUserRepository;
+import com.taskManagementSystem.repository.TaskBoardRepository;
 import com.taskManagementSystem.repository.UserRepository;
 import com.taskManagementSystem.security.JwtHelper;
 import com.taskManagementSystem.utils.TaskUtil;
 import com.taskManagementSystem.vo.SigninVo;
+import com.taskManagementSystem.vo.SignupVo;
 import com.taskManagementSystem.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -31,11 +37,25 @@ public class UserService {
     @Autowired
     private JwtHelper jwtHelper;
 
+    @Autowired
+    private TaskBoardRepository taskBoardRepository;
+
+    @Autowired
+    private TaskBoardService taskBoardService;
+
+    @Autowired
+    private BoardXUserService boardXUserService;
+
+    @Autowired
+    private BoardXUserRepository boardXUserRepository;
 
 
-    public User createUser(User user) throws UsernameNotFoundException {
+
+    public User createUser(SignupVo signupVo) throws UsernameNotFoundException {
 
         try{
+            User user = signupVo.getUser();
+
             Optional<User> userDB = userRepository.findByUsername(user.getUsername());
 
             if (userDB.isPresent())
@@ -51,15 +71,30 @@ public class UserService {
             user.setLastName(lastName);
             user.setUsername(username);
 
-            if(user.getUserRole().equals(UserRoleEnum.EDITOR_ROLE.getUserRole()))
-                user.setUserRole(UserRoleEnum.EDITOR_ROLE.getUserRole());
-            else if (user.getUserRole().equals(UserRoleEnum.VIEWER_ROLE.getUserRole())) {
-                user.setUserRole(UserRoleEnum.VIEWER_ROLE.getUserRole());
+            String role = TaskUtil.getRole(user.getUserRole());
+            user.setUserRole(role);
+
+            User savedUser = null;
+            if(role.equals(UserRoleEnum.VIEWER_ROLE.getUserRole())) {
+                List<TaskBoard> taskBoards = taskBoardRepository.findAll();
+                if (taskBoards == null || taskBoards.isEmpty())
+                    throw new CustomException("There is no task board found. Please signup as Editor!", HttpStatus.NOT_FOUND);
+
+                savedUser = userRepository.save(user);
+                boardXUserService.createBoardXUser(signupVo.getTaskBoard().getId(),
+                        savedUser.getId(),
+                        Boolean.FALSE);
             }else{
-                throw new CustomException("Role should be either 'Viewer' or 'Editor'.", HttpStatus.BAD_REQUEST);
+                savedUser = userRepository.save(user);
+                signupVo.getTaskBoard().setBoardOwnerId(savedUser.getId());
+                TaskBoard taskBoard = taskBoardService.createTaskBoard(signupVo.getTaskBoard());
+                boardXUserService.createBoardXUser(taskBoard.getId(),
+                        taskBoard.getBoardOwnerId(),
+                        Boolean.TRUE);
             }
 
-            return userRepository.save(user);
+
+            return savedUser;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -70,17 +105,17 @@ public class UserService {
             User userDB = userRepository.findByUsername(user.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("User '" + user.getUsername() + "' not found"));
 
-            String role = null;
-            if(userDB.getUserRole().equals(UserRoleEnum.EDITOR_ROLE.getUserRole()))
-                role = UserRoleEnum.EDITOR_ROLE.getUserRole();
-            else
-                role = UserRoleEnum.VIEWER_ROLE.getUserRole();
+            String role = TaskUtil.getRole(userDB.getUserRole());
+
+            BoardXUser boardXUser = boardXUserRepository.findFirstByUserId(userDB.getId());
 
             UserVo userVo = UserVo
                     .builder()
+                    .userId(userDB.getId())
                     .firstName(userDB.getFirstName())
                     .lastName(userDB.getLastName())
                     .username(userDB.getUsername())
+                    .boardId(boardXUser.getBoardId())
                     .userRole(role)
                     .build();
 
