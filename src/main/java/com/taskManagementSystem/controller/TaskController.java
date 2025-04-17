@@ -11,11 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -63,7 +64,7 @@ public class TaskController {
 
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Map<String, Object>> getUsersAllTask(@Validated @RequestParam(name = "userId") Long userId) {
+    public ResponseEntity<Map<String, Object>> getUsersAllTask(@Validated @PathVariable(name = "userId") Long userId) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -78,8 +79,8 @@ public class TaskController {
     }
 
     @DeleteMapping("/delete/{userId}/{taskId}")
-    public ResponseEntity<Map<String, Object>> deleteTask(@Validated @RequestParam(name = "userId") Long userId,
-                                                          @Validated @RequestParam(name = "taskId") Long taskId) {
+    public ResponseEntity<Map<String, Object>> deleteTask(@Validated @PathVariable(name = "userId") Long userId,
+                                                          @Validated @PathVariable(name = "taskId") Long taskId) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -94,7 +95,7 @@ public class TaskController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<Map<String, Object>> getAllTask(@Validated @RequestParam(name = "boardId") Long boardId) {
+    public ResponseEntity<Map<String, Object>> getAllTask(@Validated @PathVariable(name = "boardId") Long boardId) {
         Map<String, Object> response = new HashMap<>();
 
         try {

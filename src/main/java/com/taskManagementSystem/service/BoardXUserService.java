@@ -23,7 +23,7 @@ public class BoardXUserService {
 
         BoardXUser boardXUser = new BoardXUser();
 
-        boardXUser.setCreateAt(LocalDateTime.now());
+        boardXUser.setCreatedAt(LocalDateTime.now());
         boardXUser.setUpdatedAt(LocalDateTime.now());
         boardXUser.setIsBoardOwner(isBoardOwner);
         boardXUser.setBoardId(boardId);

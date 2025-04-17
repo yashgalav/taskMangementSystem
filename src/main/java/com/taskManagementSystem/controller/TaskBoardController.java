@@ -11,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -49,15 +49,14 @@ public class TaskBoardController {
     }
 
     @DeleteMapping("/delete/{boardId}")
-    public ResponseEntity<Map<String, Object>> deleteTaskBoard(@Validated @RequestParam(name = "boardId") Long boardId) {
+    public ResponseEntity<Map<String, Object>> deleteTaskBoard(@Validated @PathVariable(name = "boardId") Long boardId) {
         Map<String, Object> response = new HashMap<>();
 
         try {
             taskBoardService.deleteTaskBoard(boardId);
 
-        } catch (DataAccessException e) {
-            throw new CustomException("Error in inserting data",
-                    HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
         response.put("message", "Task board deleted successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);

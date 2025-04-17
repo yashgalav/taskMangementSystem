@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -57,6 +58,12 @@ public class TaskService {
                 task.setCreatedAt(LocalDateTime.now());
             if (null == task.getUpdatedAt())
                 task.setUpdatedAt(LocalDateTime.now());
+
+            String priority = TaskUtil.getPriority(task.getPriorityTag());
+            String status = TaskUtil.getStatus(task.getStatus());
+
+            task.setStatus(status);
+            task.setPriorityTag(priority);
 
             taskRepository.save(task);
         }else{
@@ -98,7 +105,7 @@ public class TaskService {
                 String status = TaskUtil.getStatus(task.getStatus());
                 taskDb.setStatus(status);
             }
-
+            taskRepository.save(taskDb);
         }else{
             throw new CustomException("Only original Editor can make changes", HttpStatus.NOT_MODIFIED);
         }
@@ -146,9 +153,9 @@ public class TaskService {
     }
 
     public List<Task> getAllTask(Long boardId) {
-        TaskBoard taskBoard = taskBoardRepository.getOne(boardId);
+        Optional<TaskBoard> taskBoard = taskBoardRepository.findById(boardId);
 
-        if(null == taskBoard)
+        if(taskBoard.isEmpty())
             throw new CustomException("Task Board not found",HttpStatus.NOT_FOUND);
 
         List<Task> tasks = taskRepository.findAllByBoardId(boardId);

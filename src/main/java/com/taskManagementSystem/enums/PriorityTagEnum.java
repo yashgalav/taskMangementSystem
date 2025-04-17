@@ -2,9 +2,9 @@ package com.taskManagementSystem.enums;
 
 public enum PriorityTagEnum {
 
-    HIGH("high"),
-    MEDIUM("medium"),
-    LOW("low");
+    HIGH("High"),
+    MEDIUM("Medium"),
+    LOW("Low");
 
     private final String priorityTag;
 

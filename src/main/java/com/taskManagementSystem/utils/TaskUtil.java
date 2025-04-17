@@ -49,7 +49,7 @@ public class TaskUtil {
         else if (priority.equals(PriorityTagEnum.LOW.getPriorityTag())) {
             result = PriorityTagEnum.LOW.getPriorityTag();
         }else {
-            throw new CustomException("Priority can be HIGH/MEDIUM/LOW.",HttpStatus.BAD_REQUEST);
+            throw new CustomException("Priority can be High/Medium/Low.",HttpStatus.BAD_REQUEST);
         }
         return result;
     }

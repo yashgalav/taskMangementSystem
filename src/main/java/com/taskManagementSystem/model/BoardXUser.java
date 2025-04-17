@@ -24,7 +24,7 @@ public class BoardXUser {
     private Boolean isBoardOwner = false;
 
     @CreatedDate
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
