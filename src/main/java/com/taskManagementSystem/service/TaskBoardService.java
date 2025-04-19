@@ -1,8 +1,6 @@
 package com.taskManagementSystem.service;
 
 import com.taskManagementSystem.exception.CustomException;
-import com.taskManagementSystem.model.Comment;
-import com.taskManagementSystem.model.Task;
 import com.taskManagementSystem.model.TaskBoard;
 import com.taskManagementSystem.repository.BoardXUserRepository;
 import com.taskManagementSystem.repository.CommentRepository;

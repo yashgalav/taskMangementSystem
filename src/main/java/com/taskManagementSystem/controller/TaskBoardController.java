@@ -1,7 +1,6 @@
 package com.taskManagementSystem.controller;
 
 import com.taskManagementSystem.exception.CustomException;
-import com.taskManagementSystem.model.Task;
 import com.taskManagementSystem.model.TaskBoard;
 import com.taskManagementSystem.service.BoardXUserService;
 import com.taskManagementSystem.service.TaskBoardService;

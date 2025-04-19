@@ -3,6 +3,7 @@ package com.taskManagementSystem.controller;
 import com.taskManagementSystem.exception.CustomException;
 import com.taskManagementSystem.model.Task;
 import com.taskManagementSystem.service.TaskService;
+import com.taskManagementSystem.vo.TaskVo;
 import com.taskManagementSystem.vo.UpdateTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -68,7 +68,7 @@ public class TaskController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Task> tasks = taskService.getUsersAllTask(userId);
+            List<TaskVo> tasks = taskService.getUsersAllTask(userId);
             response.put("tasks", tasks);
         } catch (DataAccessException e) {
             throw new CustomException("Error in Accessing the data",
@@ -99,7 +99,7 @@ public class TaskController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Task> tasks = taskService.getAllTask(boardId);
+            List<TaskVo> tasks = taskService.getAllTask(boardId);
             response.put("tasks", tasks);
         } catch (DataAccessException e) {
             throw new CustomException("Error in Accessing the data",

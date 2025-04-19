@@ -11,14 +11,19 @@ import com.taskManagementSystem.repository.TaskBoardRepository;
 import com.taskManagementSystem.repository.TaskRepository;
 import com.taskManagementSystem.repository.UserRepository;
 import com.taskManagementSystem.utils.TaskUtil;
+import com.taskManagementSystem.vo.TaskVo;
 import com.taskManagementSystem.vo.UpdateTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -112,7 +117,7 @@ public class TaskService {
 
     }
 
-    public List<Task> getUsersAllTask(Long userId) {
+    public List<TaskVo> getUsersAllTask(Long userId) {
 
         if(null == userId)
             throw new CustomException("UserId can't be null", HttpStatus.BAD_REQUEST);
@@ -123,8 +128,26 @@ public class TaskService {
         BoardXUser boardXUser = boardXUserRepository.findFirstByUserId(userId);
 
         List<Task> tasks = taskRepository.findAllByUserIdAndBoardId(userId, boardXUser.getBoardId());
+        Set<Long> userIds = tasks.stream().map(Task::getUserId).collect(Collectors.toSet());
+        Map<Long, String> userNameById = TaskUtil.getStaffMap(userRepository, userIds);
 
-        return tasks;
+        List<TaskVo> taskVos = new ArrayList<>();
+        for(Task task : tasks){
+            TaskVo taskVo = TaskVo
+                    .builder()
+                    .name(userNameById.get(task.getUserId()))
+                    .title(task.getTitle())
+                    .description(task.getDescription())
+                    .priorityTag(task.getPriorityTag())
+                    .status(task.getStatus())
+                    .createdAt(task.getCreatedAt())
+                    .boardId(task.getBoardId())
+                    .id(task.getId())
+                    .userId(task.getUserId())
+                    .build();
+            taskVos.add(taskVo);
+        }
+        return taskVos;
     }
 
     public void deleteTask(Long userId, Long taskId) {
@@ -152,13 +175,32 @@ public class TaskService {
 
     }
 
-    public List<Task> getAllTask(Long boardId) {
+    public List<TaskVo> getAllTask(Long boardId) {
         Optional<TaskBoard> taskBoard = taskBoardRepository.findById(boardId);
 
         if(taskBoard.isEmpty())
             throw new CustomException("Task Board not found",HttpStatus.NOT_FOUND);
 
         List<Task> tasks = taskRepository.findAllByBoardId(boardId);
-        return  tasks;
+        Set<Long> userIds = tasks.stream().map(Task::getUserId).collect(Collectors.toSet());
+        Map<Long, String> userNameById = TaskUtil.getStaffMap(userRepository, userIds);
+
+        List<TaskVo> taskVos = new ArrayList<>();
+        for(Task task : tasks){
+            TaskVo taskVo = TaskVo
+                    .builder()
+                    .name(userNameById.get(task.getUserId()))
+                    .title(task.getTitle())
+                    .description(task.getDescription())
+                    .priorityTag(task.getPriorityTag())
+                    .status(task.getStatus())
+                    .createdAt(task.getCreatedAt())
+                    .boardId(task.getBoardId())
+                    .id(task.getId())
+                    .userId(task.getUserId())
+                    .build();
+            taskVos.add(taskVo);
+        }
+        return taskVos;
     }
 }

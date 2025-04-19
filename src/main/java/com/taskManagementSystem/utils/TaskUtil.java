@@ -4,7 +4,16 @@ import com.taskManagementSystem.enums.PriorityTagEnum;
 import com.taskManagementSystem.enums.StatusEnum;
 import com.taskManagementSystem.enums.UserRoleEnum;
 import com.taskManagementSystem.exception.CustomException;
+import com.taskManagementSystem.model.User;
+import com.taskManagementSystem.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletionException;
+import java.util.stream.Collectors;
 
 public class TaskUtil {
 
@@ -65,5 +74,33 @@ public class TaskUtil {
             throw new CustomException("Role should be either 'Viewer' or 'Editor'.", HttpStatus.BAD_REQUEST);
 
         return role;
+    }
+
+    public static String getStaffName(String firstName , String lastName){
+        String fullName = "";
+
+        if(!isEmpty(firstName))
+            fullName += firstName.toUpperCase();
+
+        if (!isEmpty(lastName))
+            fullName += " "+lastName.toUpperCase();
+
+        if(isEmpty(fullName))
+            fullName += "UnKnown";
+
+        return fullName;
+    }
+
+    public static Map<Long, String> getStaffMap(UserRepository userRepository, Set<Long> userIds){
+        if(userIds.isEmpty())
+            throw new CustomException("User Not found", HttpStatus.NOT_FOUND);
+        List<User> users = userRepository.findByIdIn(userIds);
+        Map<Long, String> staffNameById = users.stream()
+                .collect(Collectors
+                        .toMap(User::getId,
+                                user -> TaskUtil.getStaffName(
+                                        user.getFirstName(),
+                                        user.getLastName())));
+        return staffNameById;
     }
 }
